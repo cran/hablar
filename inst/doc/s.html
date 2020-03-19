@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="David Sjoberg" />
 
@@ -95,7 +95,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -116,9 +116,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -287,7 +284,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -341,8 +339,8 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <pre><code>#&gt; [1] 3.5</code></pre>
 </div>
 </div>
-<div id="the-problems-it-solvs" class="section level2">
-<h2>The problems it solvs</h2>
+<div id="the-problems-it-solves" class="section level2">
+<h2>The problems it solves</h2>
 <div id="principle-of-least-astonishment" class="section level3">
 <h3>Principle of least astonishment</h3>
 <p>All programming languages have their special cases when you get non-intuitive results that you did not expect. This is also true for R. The s-function provides intuitive outcomes of some of the most basic commands in R. In the next parts of the vignette some problems it solves are explained in greater detail.</p>
@@ -435,10 +433,10 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <pre><code>#&gt; # A tibble: 49 x 2
 #&gt;   homeworld   tallest_human
 #&gt;   &lt;chr&gt;               &lt;dbl&gt;
-#&gt; 1 &lt;NA&gt;                   NA
-#&gt; 2 Alderaan              191
-#&gt; 3 Aleen Minor          -Inf
-#&gt; 4 Bespin                175
+#&gt; 1 Alderaan              191
+#&gt; 2 Aleen Minor          -Inf
+#&gt; 3 Bespin                175
+#&gt; 4 Bestine IV            180
 #&gt; # … with 45 more rows</code></pre>
 <p>We got negative infinity <code>-Inf</code> again. How could this be?</p>
 <p>This is because some homeworld have no humans, e.g. Cerea. R tries to calculate the maximum value of nothing. The <code>s</code> function can help you out! Since it returns <code>NA</code> if the vector is empty we get:</p>
@@ -449,10 +447,10 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <pre><code>#&gt; # A tibble: 49 x 2
 #&gt;   homeworld   tallest_human
 #&gt;   &lt;chr&gt;               &lt;int&gt;
-#&gt; 1 &lt;NA&gt;                  193
-#&gt; 2 Alderaan              191
-#&gt; 3 Aleen Minor            NA
-#&gt; 4 Bespin                175
+#&gt; 1 Alderaan              191
+#&gt; 2 Aleen Minor            NA
+#&gt; 3 Bespin                175
+#&gt; 4 Bestine IV            180
 #&gt; # … with 45 more rows</code></pre>
 <p>Now we get missing values for the homeworlds that does not have any humans. Makes sense.</p>
 </div>
@@ -498,6 +496,9 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>To summarize, <code>s</code> can help you to get results when you summarize your data, if there is an sensible answer in the vector. If not, you will get <code>NA</code>.</p>
 </div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="David Sjoberg" />
 
@@ -95,7 +95,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -116,9 +116,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -287,7 +284,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -411,13 +409,16 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb9-4" data-line-number="4"><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(pop), <span class="kw">funs</span>(as.double)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb9-5" data-line-number="5"><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(gdpPercap), <span class="kw">funs</span>(as.numeric))</a></code></pre></div>
 <pre><code>#&gt; Warning: funs() is soft deprecated as of dplyr 0.8.0
-#&gt; please use list() instead
+#&gt; Please use a list of either functions or lambdas: 
 #&gt; 
-#&gt;   # Before:
-#&gt;   funs(name = f(.))
+#&gt;   # Simple named list: 
+#&gt;   list(mean = mean, median = median)
 #&gt; 
-#&gt;   # After: 
-#&gt;   list(name = ~ f(.))
+#&gt;   # Auto named with `tibble::lst()`: 
+#&gt;   tibble::lst(mean, median)
+#&gt; 
+#&gt;   # Using lambdas
+#&gt;   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
 #&gt; This warning is displayed once per session.</code></pre>
 <pre><code>#&gt; # A tibble: 1,704 x 6
 #&gt;   country     continent  year lifeExp      pop gdpPercap
@@ -470,6 +471,9 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 #&gt; # … with 1,700 more rows</code></pre>
 </div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

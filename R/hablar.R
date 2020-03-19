@@ -1,4 +1,4 @@
-#' @import dplyr
+#' @importFrom dplyr %>% 
 #' @importFrom stats median sd var na.omit
 #' @importFrom utils install.packages installed.packages
 #'
@@ -179,22 +179,22 @@ rationalize.numeric <- function(.x, ...) {
 #' @export
 
 rationalize.data.frame <- function(.x, ...) {
-  if(length(quos(...)) == 0){
+  if(length(dplyr::quos(...)) == 0){
     .vars <- numeric(0)
   } else {
-    .vars <- quos(...)
+    .vars <- dplyr::quos(...)
   }
 
   if(length(.vars) != 0){
     .x <- .x %>%
-      mutate_at(vars(!!!.vars),
+      dplyr::mutate_at(dplyr::quos(!!!.vars),
                 ~rationalize(.))
   } else {
     .x <- .x %>%
-      mutate_at(vars(everything()),
+      dplyr::mutate_at(dplyr::quos(dplyr::everything()),
                 ~rationalize(.))
   }
-  return(as_tibble(.x))
+  return(dplyr::as_tibble(.x))
 }
 
 
@@ -357,21 +357,21 @@ retype.list <- function(.x, ...) {
 #' @method retype data.frame
 #' @export
 retype.data.frame <- function(.x, ...) {
-  if(length(quos(...)) == 0){
+  if(length(dplyr::quos(...)) == 0){
     .vars <- numeric(0)
   } else {
-    .vars <- quos(...)
+    .vars <- dplyr::quos(...)
   }
 
   if(length(.vars) != 0){
     .x <- .x %>%
-      mutate_at(vars(!!!.vars),
+      dplyr::mutate_at(dplyr::vars(!!!.vars),
                 ~retype(.))
   } else {
     .x <- .x %>%
-      mutate_all(retype)
+      dplyr::mutate_all(retype)
   }
-  return(as_tibble(.x))
+  return(dplyr::as_tibble(.x))
 }
 
 
@@ -509,45 +509,6 @@ as_reliable_dtm <- function(.x, origin = "1970-01-01", tz = "Europe/London", ...
 #' @param .args extra argument to be passed to support function.
 #'
 #' @return a tbl data frame
-#'
-#' @details
-#' The convert function requires a scoped function inside. Column names should not be quoted:.
-#' \describe{
-#'   \item{num}{Changes to numeric columns. \cr\strong{Usage: }
-#'   \code{.df %>% convert(num(.x, .y))} where \code{.x} and
-#'   \code{.y} are column names of \code{.df}}
-#'
-#'   \item{chr}{Changes to character columns. \cr\strong{Usage: }
-#'   \code{.df %>% convert(chr(.x, .y))} where
-#'   \code{.x} and \code{.y} are column names of \code{.df}}
-#'
-#'   \item{int}{Changes to integer columns. \cr\strong{Usage: }
-#'   \code{.df %>% convert(int(.x, .y))} where
-#'   \code{.x} and \code{.y} are column names of \code{.df}}
-#'
-#'   \item{lgl}{Changes to logical columns. \cr\strong{Usage: }
-#'   \code{.df %>% convert(lgl(.x, .y))} where
-#'   \code{.x} and \code{.y} are column names of \code{.df}}
-#'
-#'   \item{dte}{Changes to date columns. Default origin set to "1970-01-01" \cr\strong{Usage: }
-#'   \code{.df %>% convert(dte(.x, .y))} where \code{.x} and
-#'   \code{.y} are column names of \code{.df}}
-#'
-#'   \item{dtm}{Changes to date-time columns (POSIXct). Default origin set to "1970-01-01". \cr\strong{Usage: }
-#'   \code{.df %>% convert(dtm(.x, .y))} where \code{.x} and
-#'   \code{.y} are column names of \code{.df}}
-#'
-#'   \item{fct}{Changes to factor columns. \cr\strong{Usage: }
-#'   \code{.df %>% convert(fct(.x, .y))} where \code{.x} and
-#'   \code{.y} are column names of \code{.df}}
-#'
-#'   \item{dbl}{Changes to numeric columns. \cr\strong{Usage: }
-#'   \code{.df %>% convert(dbl(.x, .y))} where \code{.x} and
-#'   \code{.y} are column names of \code{.df}}
-#' }
-#'
-#' It is also possible to use multiple scoping functions inside \code{convert}. For example,
-#' \code{.df %>% convert(num(.x), chr(.y))} works as well.
 #' 
 #' @seealso \code{vignette("convert")}, \code{vignette("hablar")}
 #'
@@ -578,49 +539,49 @@ as_reliable_dtm <- function(.x, origin = "1970-01-01", tz = "Europe/London", ...
 #' @rdname convert
 #' @export
 num <- function(..., .args = list()){
-  list(vars = quos(...),
+  list(vars = dplyr::quos(...),
        fun = ~as_reliable_num(., !!!.args))}
 
 #' @rdname convert
 #' @export
 chr <- function(..., .args = list()){
-  list(vars = quos(...),
+  list(vars = dplyr::quos(...),
        fun = ~as.character(., !!!.args))}
 
 #' @rdname convert
 #' @export
 lgl <- function(..., .args = list()){
-  list(vars = quos(...),
+  list(vars = dplyr::quos(...),
        fun = ~as_reliable_lgl(., !!!.args))}
 
 #' @rdname convert
 #' @export
 int <- function(..., .args = list()){
-  list(vars = quos(...),
+  list(vars = dplyr::quos(...),
        fun = ~as_reliable_int(., !!!.args))}
 
 #' @rdname convert
 #' @export
 dbl <- function(..., .args = list()){
-  list(vars = quos(...),
+  list(vars = dplyr::quos(...),
        fun = ~as_reliable_num(., !!!.args))}
 
 #' @rdname convert
 #' @export
 fct <- function(..., .args = list()){
-  list(vars = quos(...),
-       fun = ~as.factor(., !!!.args))}
+  list(vars = dplyr::quos(...),
+       fun = ~factor(., !!!.args))}
 
 #' @rdname convert
 #' @export
 dtm <- function(..., .args = list()){
-  list(vars = quos(...),
+  list(vars = dplyr::quos(...),
        fun = ~as_reliable_dtm(., !!!.args))}
 
 #' @rdname convert
 #' @export
 dte <- function(..., .args = list()){
-  list(vars = quos(...),
+  list(vars = dplyr::quos(...),
        fun = ~as_reliable_dte(., !!!.args))}
 
 #' @rdname convert
@@ -634,9 +595,9 @@ convert <- function(.x, ...){
   for(i in seq_along(args)) {
     .vars <- args[[i]]$vars
     .fun  <- args[[i]]$fun
-    .x <- .x %>% mutate_at(vars(!!!.vars), .fun)
+    .x <- .x %>% dplyr::mutate_at(dplyr::vars(!!!.vars), .fun)
   }
-  return(as_tibble(.x))
+  return(dplyr::as_tibble(.x))
 }
 
 
@@ -650,7 +611,7 @@ convert <- function(.x, ...){
 #' an answer is desired, if there is one in the data. In any other case NA is returned. 
 #' Type \code{vignette("s")} in the console for more information.
 #'
-#' @param ... one or more vectors. Does not work for factors.
+#' @param .x one vector. Does not work for factors.
 #' @param ignore_na if TRUE then NA omitted from results, as long as any non-NA element is left.
 #'
 #' @return a shortened and simplified vector
@@ -709,11 +670,11 @@ convert <- function(.x, ...){
 #' @rdname s
 #' @export
 
-s <- function(..., ignore_na = TRUE) {
-  if(is.factor(...)){
+s <- function(.x, ignore_na = TRUE) {
+  if(is.factor(.x)){
     stop("s does not work with factors. Consider converting it into another data type with hablar::convert or hablar::retype.")
   }
-  .v <- rationalize(c(...))
+  .v <- rationalize(.x)
   if(all(is.na(.v)) | length(.v) == 0) {
     return(NA)
   }
@@ -744,26 +705,11 @@ s <- function(..., ignore_na = TRUE) {
 #' corresponding aggregation function. For example,
 #' \code{min_(x)} is identical to \code{min(s(x))}. Please read \code{vignette("s")} for more information.
 #'
-#' @usage sum_(..., ignore_na = TRUE)
-#'
-#' mean_(..., ignore_na = TRUE)
-#'
-#' max_(..., ignore_na = TRUE)
-#'
-#' min_(..., ignore_na = TRUE)
-#' 
-#' median_(..., ignore_na = TRUE)
-#' 
-#' sd_(..., ignore_na = TRUE)
-#' 
-#' var_(..., ignore_na = TRUE)
-#'
-#' first_(..., ignore_na = TRUE)
-#' 
-#' last_(..., ignore_na = TRUE)
-#'
-#' @param ... one or more vectors
+#' @param .x a single vector
 #' @param ignore_na if false missing values are not omitted.
+#' 
+#' @details 'first_non_na' is a faster version of 'first' since it only search for a non NA value until it finds one.
+#' 'squeeze' on the other hand checks if all elements are equal and then returns only that value.
 #'
 #' @return a single aggregated value
 #' 
@@ -791,48 +737,80 @@ s <- function(..., ignore_na = TRUE) {
 #' @rdname aggregators
 #' @export
 
-max_ <- function(..., ignore_na = TRUE) {
-  max(s(..., ignore_na = ignore_na))}
+max_ <- function(.x, ignore_na = TRUE) {
+  max(s(.x, ignore_na = ignore_na))}
 
 #' @rdname aggregators
 #' @export
-min_ <- function(..., ignore_na = TRUE) {
-  min(s(..., ignore_na = ignore_na))}
+min_ <- function(.x, ignore_na = TRUE) {
+  min(s(.x, ignore_na = ignore_na))}
 
 #' @rdname aggregators
 #' @export
-sum_ <- function(..., ignore_na = TRUE) {
-  sum(s(..., ignore_na = ignore_na))}
+sum_ <- function(.x, ignore_na = TRUE) {
+  sum(s(.x, ignore_na = ignore_na))}
 
 #' @rdname aggregators
 #' @export
-mean_ <- function(..., ignore_na = TRUE) {
-  mean(s(..., ignore_na = ignore_na))}
+mean_ <- function(.x, ignore_na = TRUE) {
+  mean(s(.x, ignore_na = ignore_na))}
 
 #' @rdname aggregators
 #' @export
-median_ <- function(..., ignore_na = TRUE) { 
-  stats::median(s(..., ignore_na = ignore_na))}
+median_ <- function(.x, ignore_na = TRUE) { 
+  stats::median(s(.x, ignore_na = ignore_na))}
 
 #' @rdname aggregators
 #' @export
-sd_ <- function(..., ignore_na = TRUE) {
-  stats::sd(s(..., ignore_na = ignore_na))}
+sd_ <- function(.x, ignore_na = TRUE) {
+  stats::sd(s(.x, ignore_na = ignore_na))}
 
 #' @rdname aggregators
 #' @export
-var_ <- function(..., ignore_na = TRUE) {
-  stats::var(s(..., ignore_na = ignore_na))}
+var_ <- function(.x, ignore_na = TRUE) {
+  stats::var(s(.x, ignore_na = ignore_na))}
 
 #' @rdname aggregators
 #' @export
-first_ <- function(..., ignore_na = TRUE) {
-  dplyr::first(s(..., ignore_na = ignore_na))}
+first_ <- function(.x, ignore_na = TRUE) {
+  dplyr::first(s(.x, ignore_na = ignore_na))}
 
 #' @rdname aggregators
 #' @export
-last_ <- function(..., ignore_na = TRUE) {
-  dplyr::last(s(..., ignore_na = ignore_na))}
+last_ <- function(.x, ignore_na = TRUE) {
+  dplyr::last(s(.x, ignore_na = ignore_na))}
+
+#' @rdname aggregators
+#' @export
+first_non_na <- function(.x) {
+  .x <- rationalize(.x)
+  .x[base::Position(function(..x)!is.na(..x), .x)]
+}
+
+#' @rdname aggregators
+#' @export
+squeeze <- function(.x, ignore_na = FALSE) {
+  .uniques <- unique(rationalize(.x))
+  if(ignore_na == FALSE & length(.uniques) > 1) {
+    stop("More than one unique value")
+  }
+  if(ignore_na == FALSE & length(na.omit(.uniques)) == 0) {
+    stop("No non missing values, to ignore missing use 'squeeze_'")
+  }
+  if(ignore_na == TRUE & length(na.omit(.uniques)) > 1) {
+    stop("More than one unique non missing value")
+  }
+  if(length(na.omit(.uniques)) == 0) {
+    return(.uniques[1])
+  }
+  .uniques[!is.na(.uniques)]
+}
+
+#' @rdname aggregators
+#' @export
+squeeze_ <- function(.x, ignore_na = TRUE) {
+  squeeze(.x, ignore_na = ignore_na)
+}
 
 
 # simplifying math functions ---------------------------------------------------
@@ -846,7 +824,7 @@ last_ <- function(..., ignore_na = TRUE) {
 #' If any of the left-hand side or right-hand side is NA, Inf or NaN it 
 #' returns any rational value, if there is any. 
 #' 
-#' However, if the both values are irriational it returns NA. 
+#' However, if the both values are irrational it returns NA. 
 #' The result is then passed to the
 #' corresponding math function.
 #'
@@ -858,7 +836,7 @@ last_ <- function(..., ignore_na = TRUE) {
 #' @seealso \code{vignette("s")}, \code{vignette("hablar")}
 #'
 #' @examples
-#' # The simplest case
+#' \dontrun{# The simplest case
 #' 3 %minus_% 2
 #' 
 #' # But with NA it returns 3 as if the NA were zero
@@ -866,129 +844,36 @@ last_ <- function(..., ignore_na = TRUE) {
 #' 
 #' # It doesnt matter if the irrational number is on left- or right-hand.
 #' NA %plus_% 5
+#' }
 #'
 #' @rdname math
 #' @export
 `%minus_%` <- function(.x, .y) {
-  if(is.na(s(.x)) & is.na(s(.y))) {return(NA)}
-  .x <- ifelse(is.na(s(.x)), 0, .x)
-  .y <- ifelse(is.na(s(.y)), 0, .y)
-  .x - .y
+  if(!all(c(class(.x), class(.y)) %in% c("integer",
+                                         "numeric"))){
+    stop("Input must be of type 'numeric' or 'integer'")
+  }
+  if(length(.x) != length(.y) & (length(.x) != 1 & length(.y) != 1)) {
+    stop("LHS need to have the same length as RHS or length 1")
+  }
+  
+  ifelse(is.na(.x), 0, .x) - ifelse(is.na(.y), 0, .y)
 }
 
 #' @rdname math
 #' @export
 `%plus_%` <- function(.x, .y) {
-  if(is.na(s(.x)) & is.na(s(.y))) {return(NA)}
-  .x <- ifelse(is.na(s(.x)), 0, .x)
-  .y <- ifelse(is.na(s(.y)), 0, .y)
-  .x + .y
+  if(!all(c(class(.x), class(.y)) %in% c("integer",
+                                         "numeric"))){
+    stop("Input must be of type 'numeric' or 'integer'")
+  }
+  if(length(.x) != length(.y) & (length(.x) != 1 & length(.y) != 1)) {
+    stop("LHS need to have the same length as RHS or length 1")
+  }
+  
+  ifelse(is.na(.x), 0, .x) + ifelse(is.na(.y), 0, .y)
 }
 
-
-
-
-# Row summary function ---------------------------------------------------------
-#' @title row functions inside dplyr mutate
-#' @name fun_by_row tidyverse_syntax for funs on rows
-#' @aliases row_sum
-#' @aliases row_sum_
-#' @aliases row_mean
-#' @aliases row_mean_
-#'
-#' @description
-#' Simple and tidyversish syntac for sum and mean of a row, or select vars.
-#' The suffix *_ version of the function removes irrational numbers and NA by default. 
-#' 
-#' Must be used inside the dplyr function \code{mutate} in order to work.
-#' 
-#'
-#' @usage row_sum(..., ignore_na = FALSE, rationalize = FALSE)
-#' 
-#' row_sum_(..., ignore_na = TRUE, rationalize = TRUE)
-#' 
-#' row_mean(..., ignore_na = FALSE, rationalize = FALSE)
-#' 
-#' row_sum_(..., ignore_na = TRUE, rationalize = TRUE)
-#'
-#' @param ... vars or tidyselect function
-#' @param ignore_na a logical indicating whether missing values should be removed
-#' @param rationalize a logical indicating whether irriational values (NaN, Inf) should be removed
-#'
-#' @return a single numeric vector of the same length as the data frame it
-#' is applied to.
-#' 
-#' @seealso \code{vignette("s")}, \code{vignette("hablar")}
-#'
-#' @examples
-#' 
-#' \dontrun{
-#' mtcars %>% 
-#'   mutate(sum_of_row = row_sum_(cyl:wt))
-#'   
-#' mtcars %>% 
-#'   mutate(mean_of_row = row_mean(disp, drat, gear))
-#' } 
-#'
-#' @rdname fun_by_row
-#' @export
-row_sum_ <- function(..., ignore_na = TRUE, rationalize = TRUE){
-  .vars <- apply_columns_quosure(...)
-  .df <- select(get_caller_df(), !!!.vars)
-  if("grouped_df" %in% class(.df)) {
-    stop("Grouped data frames not yet supported")
-  }
-  if(rationalize){
-    rowSums(rationalize(.df), na.rm = ignore_na)
-  } else {
-    rowSums(.df, na.rm = ignore_na)
-  }
-}
-
-#' @rdname fun_by_row
-#' @export
-row_sum <- function(..., ignore_na = FALSE, rationalize = FALSE){
-  .vars <- apply_columns_quosure(...)
-  .df <- select(get_caller_df(), !!!.vars)
-  if("grouped_df" %in% class(.df)) {
-    stop("Grouped data frames not yet supported")
-  }
-  if(rationalize){
-    rowSums(rationalize(.df), na.rm = ignore_na)
-  } else {
-    rowSums(.df, na.rm = ignore_na)
-  }
-}
-
-#' @rdname fun_by_row
-#' @export
-row_mean_ <- function(..., ignore_na = TRUE, rationalize = TRUE){
-  .vars <- apply_columns_quosure(...)
-  .df <- select(get_caller_df(), !!!.vars)
-  if("grouped_df" %in% class(.df)) {
-    stop("Grouped data frames not yet supported")
-  }
-  if(rationalize){
-    rowMeans(rationalize(.df), na.rm = ignore_na)
-  } else {
-    rowMeans(.df, na.rm = ignore_na)
-  }
-}
-
-#' @rdname fun_by_row
-#' @export
-row_mean <- function(..., ignore_na = FALSE, rationalize = FALSE){
-  .vars <- apply_columns_quosure(...)
-  .df <- select(get_caller_df(), !!!.vars)
-  if("grouped_df" %in% class(.df)) {
-    stop("Grouped data frames not yet supported")
-  }
-  if(rationalize){
-    rowMeans(rationalize(.df), na.rm = ignore_na)
-  } else {
-    rowMeans(.df, na.rm = ignore_na)
-  }
-}
 
 
 # Count unique elements --------------------------------------------------------
@@ -1123,11 +1008,11 @@ if_else_ <- function(condition, true, false, missing = NULL){
         }
       }
   }
-  if_else(condition, true, false, missing)
+  dplyr::if_else(condition, true, false, missing)
 }
 
 
-# replacemnt and specials ------------------------------------------------------------------------
+# replacement and specials ------------------------------------------------------------------------
 #' @title replacemnt and specials
 #' @name replacers
 #' @aliases if_na
@@ -1174,6 +1059,12 @@ if_else_ <- function(condition, true, false, missing = NULL){
 #' @export
 if_na <- function(.x, replacement, missing = NULL){
   if_else_(is.na(.x), replacement, .x, missing)
+}
+
+#' @rdname replacers
+#' @export
+if_not_na <- function(.x, replacement, missing = NULL){
+  if_else_(!is.na(.x), replacement, .x, missing)
 }
 
 #' @rdname replacers
@@ -1290,6 +1181,32 @@ dummy_ <- function(condition, missing = 0L){
 }
 
 
+# repeat_df -----------------------------------------------------------------
+#' @title repeat_df
+#' @name repeat_df
+#'
+#' @description
+#' Repeats a data frame n times. Useful for testing on large data frames.
+#'
+#' @param .df a data frame
+#' @param n times the data frame should be repeated
+#' @param id a character element that creates a column with a number for each repetition
+#'
+#' @return a vector of the integers 1, 0 and NA (if not dummy_ is used).
+#' 
+#' @seealso \code{vignette("hablar")}
+#'
+#' @examples
+#' repeat_df(mtcars, 2)
+#' 
+#' @rdname repeat_df
+#' @export
+repeat_df <- function(.df, n, id = NULL) {
+  purrr::map_dfr(1:n, ~.df, .id = id)
+}
+
+
+
 # find in df ------------------------------------------------------------
 #' @title Special filters
 #' @name find_in_df
@@ -1336,9 +1253,9 @@ find_duplicates <- function(.data, ...){
   vars <- apply_columns_quosure(...)
   
   .data %>%
-    group_by_at(vars(!!!vars)) %>%
-    filter(n() > 1) %>%
-    ungroup()
+    dplyr::group_by_at(dplyr::vars(!!!vars)) %>%
+    dplyr::filter(dplyr::n() > 1) %>%
+    dplyr::ungroup()
 }
 
 #' @rdname find_in_df
@@ -1350,7 +1267,7 @@ find_na <- function(.data, ...){
   vars <- apply_columns_quosure(...)
   
   .data %>%
-    filter_at(vars(!!!vars), any_vars(is.na(.))) 
+    dplyr::filter_at(dplyr::vars(!!!vars), dplyr::any_vars(is.na(.))) 
 }
 
 #' @rdname find_in_df
@@ -1362,7 +1279,7 @@ find_irrational <- function(.data, ...){
   vars <- apply_columns_quosure(...)
   
   .data %>%
-    filter_at(vars(!!!vars), any_vars(is.nan(.) | is.infinite(.))) 
+    dplyr::filter_at(dplyr::vars(!!!vars), dplyr::any_vars(is.nan(.) | is.infinite(.))) 
 }
 
 #' @rdname find_in_df
@@ -1374,7 +1291,7 @@ find_nan <- function(.data, ...){
   vars <- apply_columns_quosure(...)
   
   .data %>%
-    filter_at(vars(!!!vars), any_vars(is.nan(.)))
+    dplyr::filter_at(dplyr::vars(!!!vars), dplyr::any_vars(is.nan(.)))
 }
 
 #' @rdname find_in_df
@@ -1386,7 +1303,7 @@ find_inf <- function(.data, ...){
   vars <- apply_columns_quosure(...)
   
   .data %>%
-    filter_at(vars(!!!vars), any_vars(is.infinite(.))) }
+    dplyr::filter_at(dplyr::vars(!!!vars), dplyr::any_vars(is.infinite(.))) }
 
 
 # check df ------------------------------------------------------------
@@ -1403,9 +1320,11 @@ find_inf <- function(.data, ...){
 #'
 #' @return TRUE or FALSE
 #' 
-#' @details irrational values are Inf and NaN
+#' @details irrational values are Inf and NaN. 'check_complete_set' tests 
+#' if all combinations of elements exists in the data frame.
 #' 
-#' @seealso \code{\link{find_in_df}} to return rows instead of TRUE or FALSE. \code{vignette("s")}, \code{vignette("hablar")}
+#' @seealso \code{\link{find_in_df}} to return rows instead of TRUE or FALSE. 
+#' \code{vignette("s")}, \code{vignette("hablar")}
 #'
 #' @examples
 #' \dontrun{
@@ -1436,9 +1355,9 @@ check_duplicates <- function(.data, ...){
   vars <- apply_columns_quosure(...)
   
   .data %>%
-    group_by_at(vars(!!!vars)) %>%
-    filter(n() > 1) %>%
-    ungroup() %>%
+    dplyr::group_by_at(dplyr::vars(!!!vars)) %>%
+    dplyr::filter(dplyr::n() > 1) %>%
+    dplyr::ungroup() %>%
     has_rows()
 }
 
@@ -1451,7 +1370,7 @@ check_na <- function(.data, ...){
   vars <- apply_columns_quosure(...)
   
   .data %>%
-    filter_at(vars(!!!vars), any_vars(is.na(.))) %>%
+    dplyr::filter_at(dplyr::vars(!!!vars), dplyr::any_vars(is.na(.))) %>%
     has_rows()
 }
 
@@ -1464,7 +1383,7 @@ check_irrational <- function(.data, ...){
   vars <- apply_columns_quosure(...)
   
   .data %>%
-    filter_at(vars(!!!vars), any_vars(is.nan(.) | is.infinite(.))) %>%
+    dplyr::filter_at(dplyr::vars(!!!vars), dplyr::any_vars(is.nan(.) | is.infinite(.))) %>%
     has_rows()
 }
 
@@ -1477,7 +1396,7 @@ check_nan <- function(.data, ...){
   vars <- apply_columns_quosure(...)
   
   .data %>%
-    filter_at(vars(!!!vars), any_vars(is.nan(.))) %>%
+    dplyr::filter_at(dplyr::vars(!!!vars), dplyr::any_vars(is.nan(.))) %>%
     has_rows()
 }
 
@@ -1490,10 +1409,133 @@ check_inf <- function(.data, ...){
   vars <- apply_columns_quosure(...)
   
   .data %>%
-    filter_at(vars(!!!vars), any_vars(is.infinite(.))) %>%
+    dplyr::filter_at(dplyr::vars(!!!vars), dplyr::any_vars(is.infinite(.))) %>%
     has_rows()
 }
 
+#' @rdname check_df
+#' @export
+check_complete_set <- function(.data, ...) {
+  if(!is.data.frame(.data)) {
+    stop("check_duplicates() only works with data frames.")
+  }
+  vars <- apply_columns_quosure(...)
+  if(length(.data %>% dplyr::slice(1) %>% dplyr::select(!!!vars) %>% names()) < 2) {
+    stop("You need to provide at least two columns check for complete set")
+    }
+  data_distinct_nrow <- .data %>%
+    dplyr::select(!!!vars) %>% 
+    dplyr::distinct() %>% 
+    nrow()
+  complete_set_nrow <- purrr::cross_df(purrr::map(.data, ~unique(.))) %>% nrow()
+  if(complete_set_nrow == data_distinct_nrow) {
+    return(TRUE)
+  } else {
+    return(FALSE)
+  }
+}
+
+# this_date -----------------------------------------------------------------
+#' @title this_date
+#' @name this_date
+#'
+#' @description
+#' Returns the current day, month or year. Day and month returns dates and year a 4 digit number.
+#' 
+#' @examples 
+#' this_day() 
+#' this_month() 
+#' this_year() 
+#' 
+#' @return a date or number
+#' 
+#' @rdname this_date
+#' @export
+this_day <- function() {
+  lubridate::floor_date(Sys.Date(), "day")
+}
+#' @rdname this_date
+#' @export
+this_month <- function() {
+  lubridate::floor_date(Sys.Date(), "month")
+}
+#' @rdname this_date
+#' @export
+this_year <- function() {
+  lubridate::year(lubridate::floor_date(Sys.Date(), "year"))
+}
+
+
+# cumulative funs --------------------------------------------------------------
+#' @title cumulative_
+#' @name cumulative_
+#'
+#' @description
+#' cumulative functions. 'cumsum_' is the cumulative sum ignoring missing values.
+#' 'cum_unique' counts the cumulative unique value including NA as ONE value. 
+#' 'cum_unique_' ignores missing values
+#' 
+#' @param .v a vector
+#' @param ignore_na should missing values be ignores?
+#' 
+#' @return a vector
+#' 
+#' @rdname cumulative_
+#' @export
+cumsum_ <- function(.v, ignore_na = TRUE) {
+  purrr::map_dbl(1:length(.v), ~sum_(.v[1:.x], ignore_na = ignore_na))
+}
+
+#' @rdname cumulative_
+#' @export
+cummean_ <- function(.v, ignore_na = TRUE) {
+  purrr::map_dbl(1:length(.v), ~mean_(.v[1:.x], ignore_na = ignore_na))
+}
+
+#' @rdname cumulative_
+#' @export
+cum_unique <- function(.v, ignore_na = FALSE) {
+  purrr::map_dbl(1:length(.v), ~n_unique(.v[1:.x], ignore_na = ignore_na))
+}
+
+#' @rdname cumulative_
+#' @export
+cum_unique_ <- function(.v, ignore_na = TRUE) {
+  cum_unique(.v, ignore_na = ignore_na)
+}
+
+
+# given ------------------------------------------------------------------------
+#' @title given
+#' @name given
+#'
+#' @description
+#' Simple function that filters a vector while helping with missing values.
+#' Replacing expression like 'x[x > 3 & !is.null(x)]'
+#' 
+#' @param .x the vector to filter
+#' @param .y a logical vector to filter with
+#' @param ignore_na should NA be removed?
+#' 
+#' @return a vector
+#' 
+#' @example 
+#' x <- c(1, 2, NA, 4)
+#' x %>% given_(x >= 2)
+#' 
+#' @rdname given
+#' @export
+given <- function(.x, .y, ignore_na = FALSE) {
+  if(ignore_na) {.y <- if_na(.y, FALSE)}
+  if(all(.y == FALSE)) return(NA)
+  .x[.y]
+}
+
+#' @rdname given
+#' @export
+given_ <- function(.x, .y, ignore_na = TRUE) {
+  given(.x, .y, ignore_na = ignore_na)
+}
 
 
 # Set wd to script path --------------------------------------------------------
@@ -1529,10 +1571,10 @@ set_wd_to_script_path <- function(){
 
 # Gets the .Data from mutate call if called from inside a function in a mutate call.
 # That is df %>% mutate(a = f()) and the function f() contains get_caller_df()
-get_caller_df <- function (.vars) {
-  frames <- sys.frames()
-  frames[[length(frames) - 4]]$.data
-}
+  # get_caller_df <- function (.vars) {
+  #   frames <- sys.frames()
+  #   frames[[length(frames) - 4]]$.data
+  # }
 
 # A function that sets a class on a generic NA. If not a generic NA, the function returns input.
 check_single_generic_na <- function(.x){
@@ -1550,8 +1592,8 @@ check_single_generic_na <- function(.x){
 
 # If not variables are choosed all should be chosen
 apply_columns_quosure <- function(...){
-  .vars <- quos(...)
-  if(length(.vars) == 0) .vars <- quos(everything())
+  .vars <- dplyr::quos(...)
+  if(length(.vars) == 0) .vars <- dplyr::quos(dplyr::everything())
   return(.vars)
 }
 
