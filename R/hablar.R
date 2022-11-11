@@ -9,7 +9,7 @@ if(getRversion() >= "2.15.1") utils::globalVariables(c("."))
 requireNamespace("rstudioapi", quietly = TRUE)
 
 # could_this_be_that -----------------------------------------------------------
-
+ 
 #' @title Tests is a vector could be of another data type
 #' @name could_this_be_that
 #' @aliases  could_chr_be_num
@@ -73,7 +73,7 @@ could_chr_be_int <- function(.x) {
   if(all(is.na(.x)) | length(.x) == 0) {
     return(FALSE)}
   .x <- as.numeric(.x)
-  if(all(is.na(.x)) | length(.x) == 0) {
+  if(all(is.na(.x)) | length(.x) == 0 | any(.x > .Machine$integer.max, na.rm=T)) {
     return(FALSE)}
   ifelse(all(.x[!is.na(.x)] == as.integer(.x[!is.na(.x)])), TRUE, FALSE)
 }
@@ -83,7 +83,7 @@ could_chr_be_int <- function(.x) {
 could_num_be_int <- function(.x) {
   if(!is.numeric(.x)) {
     stop("Only works with numeric vectors")}
-  if(all(is.na(.x)) | length(.x) == 0 | any(is.nan(.x) | any(is.infinite(.x)))) {
+  if(all(is.na(.x)) | length(.x) == 0 | any(is.nan(.x) | any(is.infinite(.x))) | any(.x > .Machine$integer.max, na.rm=T)) {
     return(FALSE)}
   ifelse(all(.x[!is.na(.x)] == as.integer(.x[!is.na(.x)])), TRUE, FALSE)
 }
@@ -95,19 +95,32 @@ could_chr_be_dtm <- function(.x) {
     stop("Only works with character vectors")}
   if(all(is.na(.x)) | length(.x) == 0) {
     return(FALSE)}
-  res <- try(as.POSIXct(.x),silent = TRUE)
-  ifelse(all(class(res) != "try-error") == TRUE, TRUE, FALSE)
+  res <- try(as.POSIXct(.x), silent = TRUE)
+  test <- ifelse(all(class(res) != "try-error") == TRUE, TRUE, FALSE)
+  if(test) {
+    if(all(strftime(res, format="%H:%M:%S") %in% c("00:00:00", NA_character_))) {
+      return(FALSE)
+    } else {
+      return(TRUE)
+    }
+  } else {
+    return(FALSE)
+  }
 }
 
 #' @rdname could_this_be_that
 #' @export
-could_dtm_be_dte <- function(.x) {
-  if(!any(class(.x) %in% c("POSIXct", "POSIXt"))) {
-    stop("Only works with date-time vectors (POSIXct)")}
+could_chr_be_dte <- function(.x) {
+  if(!is.character(.x)) {
+    stop("Only works with character vectors")}
   if(all(is.na(.x)) | length(.x) == 0) {
     return(FALSE)}
-  .timestamps <- strftime(.x, format="%H:%M:%S")
-  ifelse(length(unique(.timestamps[!is.na(.timestamps)])) == 1, TRUE, FALSE)
+  .test <- tryCatch(as.Date(.x),
+                    error=function(e) e,
+                    warning=function(w) w)
+  if(any(attributes(.test)$class %in% c("warning", "error"))) {
+    return(FALSE)
+  } else {TRUE}
 }
 
 
@@ -194,7 +207,7 @@ rationalize.data.frame <- function(.x, ...) {
       dplyr::mutate_at(dplyr::quos(dplyr::everything()),
                 ~rationalize(.))
   }
-  return(dplyr::as_tibble(.x))
+  return(.x)
 }
 
 
@@ -280,15 +293,13 @@ retype.default <- function(.x, ...) {
 
   # Dates
   if(could_chr_be_dtm(.x) == TRUE) {
-    .x <- as.POSIXct(.x)
-    if(could_dtm_be_dte(.x) == TRUE) {
-      return(as.Date(strftime(.x)))
-    } else {
-      return(.x)
-    }
+      return(as.POSIXct(.x))
   }
-
-  return(.x)
+  if (could_chr_be_dte(.x) == TRUE) {
+    return(as.Date(.x))
+  } else {
+    return(.x)
+  }
 }
 
 #' @return \code{NULL}
@@ -324,10 +335,7 @@ retype.Date <- function(.x, ...) {
 #' @method retype POSIXct
 #' @export
 retype.POSIXct <- function(.x, ...) {
-  if(could_dtm_be_dte(.x) == TRUE) {
-    .x <- as.Date(strftime(.x))
-  }
-  return(.x)
+  .x
 }
 
 #' @return \code{NULL}
@@ -371,7 +379,7 @@ retype.data.frame <- function(.x, ...) {
     .x <- .x %>%
       dplyr::mutate_all(retype)
   }
-  return(dplyr::as_tibble(.x))
+  return(.x)
 }
 
 
@@ -397,11 +405,11 @@ retype.data.frame <- function(.x, ...) {
 #'
 #' as_reliable_dte(.x, origin = "1970-01-01", ...)
 #'
-#' as_reliable_dtm(.x, origin = "1970-01-01", tz = "Europe/London", ...)
+#' as_reliable_dtm(.x, origin = "1970-01-01", tz = "UTC", ...)
 #'
 #' @param .x vector
 #' @param origin argument to set origin for date/date time.
-#' @param tz argument to set time zone for date/date time. Default is Europe/London.
+#' @param tz argument to set time zone for date/date time. Default is UTC.
 #' @param ... additional arguments
 #'
 #' @return vector
@@ -475,7 +483,7 @@ as_reliable_dte <- function(.x, origin = "1970-01-01", ...) {
 
 #' @rdname as_reliable
 #' @export
-as_reliable_dtm <- function(.x, origin = "1970-01-01", tz = "Europe/London", ...) {
+as_reliable_dtm <- function(.x, origin = "1970-01-01", tz = "UTC", ...) {
   if(any(class(.x) == "POSIXct")) {
     return(.x)}
   if(is.logical(.x)) {
@@ -597,7 +605,7 @@ convert <- function(.x, ...){
     .fun  <- args[[i]]$fun
     .x <- .x %>% dplyr::mutate_at(dplyr::vars(!!!.vars), .fun)
   }
-  return(dplyr::as_tibble(.x))
+  return(.x)
 }
 
 
@@ -675,8 +683,12 @@ s <- function(.x, ignore_na = TRUE) {
     stop("s does not work with factors. Consider converting it into another data type with hablar::convert or hablar::retype.")
   }
   .v <- rationalize(.x)
-  if(all(is.na(.v)) | length(.v) == 0) {
-    return(NA)
+  if(all(is.na(.v))) {
+    return(.v[1])
+  }
+  if(length(.v) == 0) {
+    na <- c(NA, .x[1])[1]
+    return(na)
   }
   if(ignore_na) {return(c(.v[!is.na(.v)]))}
   return(.v)
@@ -1519,9 +1531,11 @@ cum_unique_ <- function(.v, ignore_na = TRUE) {
 #' 
 #' @return a vector
 #' 
-#' @example 
+#' @examples 
+#' \dontrun{
 #' x <- c(1, 2, NA, 4)
 #' x %>% given_(x >= 2)
+#' }
 #' 
 #' @rdname given
 #' @export

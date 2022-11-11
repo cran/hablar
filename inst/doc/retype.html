@@ -13,8 +13,21 @@
 <meta name="author" content="David Sjoberg" />
 
 
-<title>retype - auto data type conversion</title>
+<title>retype</title>
 
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 <script>(function() {
   // If window.HTMLWidgets is already defined, then use it; otherwise create a
   // new object. This allows preceding code to set options that affect the
@@ -266,13 +279,13 @@
   function tryEval(code) {
     var result = null;
     try {
-      result = eval(code);
+      result = eval("(" + code + ")");
     } catch(error) {
-      if (!error instanceof SyntaxError) {
+      if (!(error instanceof SyntaxError)) {
         throw error;
       }
       try {
-        result = eval("(" + code + ")");
+        result = eval(code);
       } catch(e) {
         if (e instanceof SyntaxError) {
           throw error;
@@ -1188,7 +1201,7 @@ color: #333333;
             // Get node id
             var nodeid = e.currentTarget.id;
             // Get node text object and make an array
-            var node_texts = $("#" + nodeid + " text");
+            var node_texts = $("#" + id + " #" + nodeid + " text");
             //var node_path = $("#" + nodeid + " path")[0];
             var text_array = node_texts.map(function() {return $(this).text(); }).toArray();
             // Build return object *obj* with node-id, node text values and node fill
@@ -1232,29 +1245,48 @@ color: #333333;
 });
 </script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -1263,9 +1295,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -1319,6 +1351,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
+
 
 
 
@@ -1514,7 +1547,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore"><code>retype</code> - auto data type conversion</h1>
+<h1 class="title toc-ignore">retype</h1>
 <h4 class="author">David Sjoberg</h4>
 
 
@@ -1523,48 +1556,63 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h2>Can the data be simpler?</h2>
 <div id="retype-quick-start-your-analysis" class="section level3">
 <h3><code>retype</code> quick start your analysis</h3>
-<p>Getting data into R can be hassle. But once you do, it often have incorrect data types/classes. For instance, it is not uncommon that numeric variables are characters or dates are classed as characters.</p>
-<p>Data conversion is cumbersome and small coding mistakes can produce large issues. The hablar package facilitates correction of all data types directly after you import the data into R such that you can avoid dangerous operations at later stages!</p>
+<p>Getting data into R can be hassle. But once you do, it often have
+incorrect data types/classes. For instance, it is not uncommon that
+numeric variables are characters or dates are classed as characters.</p>
+<p>Data conversion is cumbersome and small coding mistakes can produce
+large issues. The hablar package facilitates correction of all data
+types directly after you import the data into R such that you can avoid
+dangerous operations at later stages!</p>
 </div>
 <div id="what-does-retype-do" class="section level3">
 <h3>What does <code>retype</code> do?</h3>
-<p><code>retype</code> provides an easy approach for quick and dirty data type conversion. It follows a strict simplification hierarchy for each column of your data frame. It only converts the column if it can assume that no important information is lost in the process. For example, the character vector <code>c(&quot;1&quot;, &quot;2&quot;)</code> should rather be an integer vector. Similarly, the character <code>&quot;2010-06-04&quot;</code> should be a date. Factors have advantages, but they are never the simplest solution and hence it is always converted to character, at least.</p>
+<p><code>retype</code> provides an easy approach for quick and dirty
+data type conversion. It follows a strict simplification hierarchy for
+each column of your data frame. It only converts the column if it can
+assume that no important information is lost in the process. For
+example, the character vector <code>c(&quot;1&quot;, &quot;2&quot;)</code> should rather be
+an integer vector. Similarly, the character <code>&quot;2010-06-04&quot;</code>
+should be a date. Factors have advantages, but they are never the
+simplest solution and hence it is always converted to character, at
+least.</p>
 </div>
 <div id="usage" class="section level3">
 <h3>Usage</h3>
 <p><code>retype(x, ...)</code></p>
-<p>where <code>x</code> is a data frame, and <code>...</code> is the column names you want to apply <code>retype</code> to. <code>x</code> could also be a single vector.</p>
+<p>where <code>x</code> is a data frame, and <code>...</code> is the
+column names you want to apply <code>retype</code> to. <code>x</code>
+could also be a single vector.</p>
 </div>
 <div id="simple-example-numeric" class="section level3">
 <h3>Simple example: numeric</h3>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">retype</span>(x)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="dv">3</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">retype</span>(x)</span></code></pre></div>
 <pre><code>#&gt; [1] 3</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">class</span>(<span class="kw">retype</span>(x))</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(<span class="fu">retype</span>(x))</span></code></pre></div>
 <pre><code>#&gt; [1] &quot;integer&quot;</code></pre>
 </div>
 <div id="simple-example-character" class="section level3">
 <h3>Simple example: character</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="st">&quot;2017-03-02&quot;</span>)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">retype</span>(x)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="st">&quot;2017-03-02&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">retype</span>(x)</span></code></pre></div>
 <pre><code>#&gt; [1] &quot;2017-03-02&quot;</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">class</span>(<span class="kw">retype</span>(x))</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(<span class="fu">retype</span>(x))</span></code></pre></div>
 <pre><code>#&gt; [1] &quot;Date&quot;</code></pre>
 </div>
 <div id="simple-example-character-1" class="section level3">
 <h3>Simple example: character</h3>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">c</span>(<span class="st">&quot;3,56&quot;</span>, <span class="st">&quot;0,78&quot;</span>))</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="kw">retype</span>(x)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">c</span>(<span class="st">&quot;3,56&quot;</span>, <span class="st">&quot;0,78&quot;</span>))</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">retype</span>(x)</span></code></pre></div>
 <pre><code>#&gt; [1] &quot;3,56&quot; &quot;0,78&quot;</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">class</span>(<span class="kw">retype</span>(x))</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(<span class="fu">retype</span>(x))</span></code></pre></div>
 <pre><code>#&gt; [1] &quot;character&quot;</code></pre>
 </div>
 <div id="simple-example-factor" class="section level3">
 <h3>Simple example: factor</h3>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw">as.factor</span>(<span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">4</span>))</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">retype</span>(x)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(<span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">retype</span>(x)</span></code></pre></div>
 <pre><code>#&gt; [1] 3 4</code></pre>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">class</span>(<span class="kw">retype</span>(x))</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(<span class="fu">retype</span>(x))</span></code></pre></div>
 <pre><code>#&gt; [1] &quot;integer&quot;</code></pre>
 </div>
 </div>
@@ -1572,33 +1620,45 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h2>The simplification hierarchy</h2>
 <div id="some-things-are-simpler-than-others" class="section level3">
 <h3>Some things are simpler than others</h3>
-<p><code>retype</code> uses a procedure to determine which data type is the simplest, without loosing any vital information in your data.</p>
+<p><code>retype</code> uses a procedure to determine which data type is
+the simplest, without loosing any vital information in your data.</p>
 <ul>
-<li><p>The first thing to know about <code>retype</code> is that it always converts factors to character.</p></li>
-<li><p>The second thing to know is that all logical columns are converted to integers.</p></li>
+<li><p>The first thing to know about <code>retype</code> is that it
+always converts factors to character.</p></li>
+<li><p>The second thing to know is that all logical columns are
+converted to integers.</p></li>
 <li><p>Thirdly, complex and list columns are left unchanged.</p></li>
-<li><p>From there it will test if the data could be coded as numeric. If true it converts the column to numeric.</p></li>
-<li><p>If it is numeric it tests if it could be an integer instead. If true, it converts the column to integer.</p></li>
-<li><p>If it is a character it tests if it could be a data time column. If true, it converts it to a date time (POSIXct) column.</p></li>
-<li><p>If it is a date time column it tests if it could be a date. If true, it converts it to a date column.</p></li>
+<li><p>From there it will test if the data could be coded as numeric. If
+true it converts the column to numeric.</p></li>
+<li><p>If it is numeric it tests if it could be an integer instead. If
+true, it converts the column to integer.</p></li>
+<li><p>If it is a character it tests if it could be a date column. If
+true, it converts it to a date column.</p></li>
+<li><p>If it is a date time column it tests if it could be a date. If
+true, it converts it to a date column.</p></li>
 </ul>
 </div>
 <div id="a-visualization-of-the-hierarchy" class="section level3">
 <h3>A visualization of the hierarchy</h3>
-<p>The above procedure could more intuitively be described in a diagram. The arrows imply a test if a column could be converted to another without loosing information in your data. The procedure continues until it cannot be simplified further.</p>
-<div id="htmlwidget-fd8208c91e0064d5bc43" style="width:288px;height:288px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-fd8208c91e0064d5bc43">{"x":{"diagram":"digraph d {\n\n      node [shape = circle, style = filled]\n      factor;character;numeric;integer;\"date time\";date;logical;list;complex\n\n      logical -> integer;\n      factor -> character;\n      character -> numeric\n      numeric -> integer;\n      character -> \"date time\";\n      \"date time\" -> date;\n      }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p>The above procedure could more intuitively be described in a diagram.
+The arrows imply a test if a column could be converted to another
+without loosing information in your data. The procedure continues until
+it cannot be simplified further.</p>
+<div id="htmlwidget-ca253f520ef717ec1a5b" style="width:288px;height:288px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ca253f520ef717ec1a5b">{"x":{"diagram":"digraph d {\n\n      node [shape = circle, style = filled]\n      factor;character;numeric;integer;\"date time\";date;logical;list;complex\n\n      logical -> integer;\n      factor -> character;\n      character -> numeric\n      numeric -> integer;\n      character -> date;\n      date -> \"date time\";\n      }","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div id="example-on-a-data-frame" class="section level2">
 <h2>Example on a data frame</h2>
-<p>Examine the following dataset <code>starwars</code> from the package <code>dplyr</code>. First, we use <code>convert</code> on some columns to new data types.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">df &lt;-<span class="st"> </span>starwars <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="st">  </span><span class="kw">select</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="st">  </span><span class="kw">convert</span>(<span class="kw">fct</span>(name),</a>
-<a class="sourceLine" id="cb17-4" data-line-number="4">           <span class="kw">chr</span>(height<span class="op">:</span>mass),</a>
-<a class="sourceLine" id="cb17-5" data-line-number="5">           <span class="kw">fct</span>(hair_color)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb17-6" data-line-number="6"><span class="st">  </span><span class="kw">print</span>()</a></code></pre></div>
+<p>Examine the following dataset <code>starwars</code> from the package
+<code>dplyr</code>. First, we use <code>convert</code> on some columns
+to new data types.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> starwars <span class="sc">%&gt;%</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">convert</span>(<span class="fu">fct</span>(name),</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>           <span class="fu">chr</span>(height<span class="sc">:</span>mass),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">fct</span>(hair_color)) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>()</span></code></pre></div>
 <pre><code>#&gt; # A tibble: 87 x 4
 #&gt;   name           height mass  hair_color
 #&gt;   &lt;fct&gt;          &lt;chr&gt;  &lt;chr&gt; &lt;fct&gt;     
@@ -1606,10 +1666,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; 2 C-3PO          167    75    &lt;NA&gt;      
 #&gt; 3 R2-D2          96     32    &lt;NA&gt;      
 #&gt; 4 Darth Vader    202    136   none      
-#&gt; # … with 83 more rows</code></pre>
+#&gt; # ... with 83 more rows</code></pre>
 <p>We then apply <code>retype</code> on <code>df</code>:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">df <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="st">  </span><span class="kw">retype</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">retype</span>()</span></code></pre></div>
 <pre><code>#&gt; # A tibble: 87 x 4
 #&gt;   name           height  mass hair_color
 #&gt;   &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;     
@@ -1617,14 +1677,20 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 #&gt; 2 C-3PO             167    75 &lt;NA&gt;      
 #&gt; 3 R2-D2              96    32 &lt;NA&gt;      
 #&gt; 4 Darth Vader       202   136 none      
-#&gt; # … with 83 more rows</code></pre>
-<p>Which correctly guessed that height preferably should be an integer vector and that mass works better as a numeric column. The factors were converted to character columns.</p>
+#&gt; # ... with 83 more rows</code></pre>
+<p>Which correctly guessed that height preferably should be an integer
+vector and that mass works better as a numeric column. The factors were
+converted to character columns.</p>
 </div>
 <div id="final-notes" class="section level2">
 <h2>Final notes</h2>
 <div id="retype-in-production-code" class="section level3">
 <h3><code>retype</code> in production code</h3>
-<p>Never use <code>retype</code> when you need your scripts to work the next time in the exact same way. <code>retype</code> may change over time, it could guess wrong and your data may change. Use <code>hablar::convert</code> instead where you explicitly state which data type each column should have.</p>
+<p>Never use <code>retype</code> when you need your scripts to work the
+next time in the exact same way. <code>retype</code> may change over
+time, it could guess wrong and your data may change. Use
+<code>hablar::convert</code> instead where you explicitly state which
+data type each column should have.</p>
 </div>
 </div>
 

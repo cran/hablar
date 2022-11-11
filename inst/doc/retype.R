@@ -45,8 +45,8 @@ grViz("digraph d {
       factor -> character;
       character -> numeric
       numeric -> integer;
-      character -> 'date time';
-      'date time' -> date;
+      character -> date;
+      date -> 'date time';
       }")
 
 ## -----------------------------------------------------------------------------
