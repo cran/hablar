@@ -30,23 +30,23 @@ document.addEventListener('DOMContentLoaded', function(e) {
 </script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
 
 
 
 <style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
@@ -64,55 +64,54 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
 div.sourceCode
-  {   }
+{ }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -121,13 +120,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -391,27 +397,29 @@ use is with examples. Have a look at the a gapminder dataset from the
 package <code>gapminder</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gapminder)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>gapminder</span></code></pre></div>
-<pre><code>#&gt; # A tibble: 1,704 x 6
+<pre><code>#&gt; # A tibble: 1,704 × 6
 #&gt;   country     continent  year lifeExp      pop gdpPercap
 #&gt;   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
 #&gt; 1 Afghanistan Asia       1952    28.8  8425333      779.
 #&gt; 2 Afghanistan Asia       1957    30.3  9240934      821.
 #&gt; 3 Afghanistan Asia       1962    32.0 10267083      853.
 #&gt; 4 Afghanistan Asia       1967    34.0 11537966      836.
-#&gt; # ... with 1,700 more rows</code></pre>
+#&gt; # … with 1,700 more rows
+#&gt; # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>We might want to change the country column to character instead of
 factor. To do this we use <code>chr</code> together with the column name
 inside <code>convert</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>gapminder <span class="sc">%&gt;%</span> </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">convert</span>(<span class="fu">chr</span>(country))</span></code></pre></div>
-<pre><code>#&gt; # A tibble: 1,704 x 6
+<pre><code>#&gt; # A tibble: 1,704 × 6
 #&gt;   country     continent  year lifeExp      pop gdpPercap
 #&gt;   &lt;chr&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
 #&gt; 1 Afghanistan Asia       1952    28.8  8425333      779.
 #&gt; 2 Afghanistan Asia       1957    30.3  9240934      821.
 #&gt; 3 Afghanistan Asia       1962    32.0 10267083      853.
 #&gt; 4 Afghanistan Asia       1967    34.0 11537966      836.
-#&gt; # ... with 1,700 more rows</code></pre>
+#&gt; # … with 1,700 more rows
+#&gt; # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>This converted the country column to the data type character. But we
 do not have to make this whole procedure for each column if we want to
 convert more columns. Let’s say that we also want to convert continent
@@ -423,14 +431,15 @@ gdpPercap to numeric. It is simply done:</p>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>          <span class="fu">int</span>(lifeExp),</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>          <span class="fu">dbl</span>(pop),</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>          <span class="fu">num</span>(gdpPercap))</span></code></pre></div>
-<pre><code>#&gt; # A tibble: 1,704 x 6
+<pre><code>#&gt; # A tibble: 1,704 × 6
 #&gt;   country     continent  year lifeExp      pop gdpPercap
 #&gt;   &lt;chr&gt;       &lt;chr&gt;     &lt;int&gt;   &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 #&gt; 1 Afghanistan Asia       1952      28  8425333      779.
 #&gt; 2 Afghanistan Asia       1957      30  9240934      821.
 #&gt; 3 Afghanistan Asia       1962      31 10267083      853.
 #&gt; 4 Afghanistan Asia       1967      34 11537966      836.
-#&gt; # ... with 1,700 more rows</code></pre>
+#&gt; # … with 1,700 more rows
+#&gt; # ℹ Use `print(n = ...)` to see more rows</code></pre>
 </div>
 </div>
 <div id="i-can-already-convert-between-data-types.-why-do-i-need-convert" class="section level2">
@@ -445,14 +454,15 @@ operation:</p>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">lifeExp =</span> <span class="fu">as.integer</span>(lifeExp),</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">pop =</span> <span class="fu">as.double</span>(pop),</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">gdpPercap =</span> <span class="fu">as.numeric</span>(gdpPercap))</span></code></pre></div>
-<pre><code>#&gt; # A tibble: 1,704 x 6
+<pre><code>#&gt; # A tibble: 1,704 × 6
 #&gt;   country     continent  year lifeExp      pop gdpPercap
 #&gt;   &lt;chr&gt;       &lt;chr&gt;     &lt;int&gt;   &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 #&gt; 1 Afghanistan Asia       1952      28  8425333      779.
 #&gt; 2 Afghanistan Asia       1957      30  9240934      821.
 #&gt; 3 Afghanistan Asia       1962      31 10267083      853.
 #&gt; 4 Afghanistan Asia       1967      34 11537966      836.
-#&gt; # ... with 1,700 more rows</code></pre>
+#&gt; # … with 1,700 more rows
+#&gt; # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>Which gives the same result. However, you need to refer to the column
 name twice and the data type conversion function for each column.
 Imagine the code to convert 20 columns.</p>
@@ -465,26 +475,22 @@ The same example would then look like:</p>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(pop), <span class="fu">funs</span>(as.double)) <span class="sc">%&gt;%</span> </span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="fu">vars</span>(gdpPercap), <span class="fu">funs</span>(as.numeric))</span></code></pre></div>
 <pre><code>#&gt; Warning: `funs()` was deprecated in dplyr 0.8.0.
-#&gt; Please use a list of either functions or lambdas: 
+#&gt; ℹ Please use a list of either functions or lambdas:
 #&gt; 
-#&gt;   # Simple named list: 
-#&gt;   list(mean = mean, median = median)
+#&gt; # Simple named list: list(mean = mean, median = median)
 #&gt; 
-#&gt;   # Auto named with `tibble::lst()`: 
-#&gt;   tibble::lst(mean, median)
+#&gt; # Auto named with `tibble::lst()`: tibble::lst(mean, median)
 #&gt; 
-#&gt;   # Using lambdas
-#&gt;   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
-#&gt; This warning is displayed once every 8 hours.
-#&gt; Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
-<pre><code>#&gt; # A tibble: 1,704 x 6
+#&gt; # Using lambdas list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))</code></pre>
+<pre><code>#&gt; # A tibble: 1,704 × 6
 #&gt;   country     continent  year lifeExp      pop gdpPercap
 #&gt;   &lt;chr&gt;       &lt;chr&gt;     &lt;int&gt;   &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 #&gt; 1 Afghanistan Asia       1952      28  8425333      779.
 #&gt; 2 Afghanistan Asia       1957      30  9240934      821.
 #&gt; 3 Afghanistan Asia       1962      31 10267083      853.
 #&gt; 4 Afghanistan Asia       1967      34 11537966      836.
-#&gt; # ... with 1,700 more rows</code></pre>
+#&gt; # … with 1,700 more rows
+#&gt; # ℹ Use `print(n = ...)` to see more rows</code></pre>
 <p>Which is more easily scaled to deal with data type conversion of
 large numbers of variables. However, <code>convert</code> does the same
 job with much less code. In fact, <code>convert</code> uses
@@ -496,14 +502,15 @@ readability. Compare again with <code>convert</code>:</p>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>           <span class="fu">int</span>(lifeExp),</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">dbl</span>(pop),</span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>           <span class="fu">num</span>(gdpPercap))</span></code></pre></div>
-<pre><code>#&gt; # A tibble: 1,704 x 6
+<pre><code>#&gt; # A tibble: 1,704 × 6
 #&gt;   country     continent  year lifeExp      pop gdpPercap
 #&gt;   &lt;chr&gt;       &lt;chr&gt;     &lt;int&gt;   &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 #&gt; 1 Afghanistan Asia       1952      28  8425333      779.
 #&gt; 2 Afghanistan Asia       1957      30  9240934      821.
 #&gt; 3 Afghanistan Asia       1962      31 10267083      853.
 #&gt; 4 Afghanistan Asia       1967      34 11537966      836.
-#&gt; # ... with 1,700 more rows</code></pre>
+#&gt; # … with 1,700 more rows
+#&gt; # ℹ Use `print(n = ...)` to see more rows</code></pre>
 </div>
 <div id="adding-additional-arguments" class="section level2">
 <h2>Adding additional arguments</h2>
@@ -514,7 +521,7 @@ argument you can write:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">dates =</span> <span class="fu">c</span>(<span class="dv">12818</span>, <span class="dv">13891</span>),</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">sunny =</span> <span class="fu">c</span>(<span class="st">&quot;yes&quot;</span>, <span class="st">&quot;no&quot;</span>)) <span class="sc">%&gt;%</span> </span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">convert</span>(<span class="fu">dte</span>(dates, <span class="at">.args =</span> <span class="fu">list</span>(<span class="at">origin =</span> <span class="st">&quot;1900-01-01&quot;</span>)))</span></code></pre></div>
-<pre><code>#&gt; # A tibble: 2 x 2
+<pre><code>#&gt; # A tibble: 2 × 2
 #&gt;   dates      sunny
 #&gt;   &lt;date&gt;     &lt;chr&gt;
 #&gt; 1 1935-02-05 yes  
@@ -530,14 +537,15 @@ want to change all columns with names that includes the letter “e” to
 factors, you can write:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>gapminder <span class="sc">%&gt;%</span> </span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">convert</span>(<span class="fu">fct</span>(<span class="fu">contains</span>(<span class="st">&quot;e&quot;</span>)))</span></code></pre></div>
-<pre><code>#&gt; # A tibble: 1,704 x 6
+<pre><code>#&gt; # A tibble: 1,704 × 6
 #&gt;   country     continent year  lifeExp      pop gdpPercap  
 #&gt;   &lt;fct&gt;       &lt;fct&gt;     &lt;fct&gt; &lt;fct&gt;      &lt;int&gt; &lt;fct&gt;      
 #&gt; 1 Afghanistan Asia      1952  28.801   8425333 779.4453145
 #&gt; 2 Afghanistan Asia      1957  30.332   9240934 820.8530296
 #&gt; 3 Afghanistan Asia      1962  31.997  10267083 853.10071  
 #&gt; 4 Afghanistan Asia      1967  34.02   11537966 836.1971382
-#&gt; # ... with 1,700 more rows</code></pre>
+#&gt; # … with 1,700 more rows
+#&gt; # ℹ Use `print(n = ...)` to see more rows</code></pre>
 </div>
 
 
